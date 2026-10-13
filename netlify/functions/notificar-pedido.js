@@ -13,22 +13,22 @@ const PRECIOS = {
   "sopa-miso": { nombre: "Sopa Miso, tofu y soba", precio: 4.5 },
   "gyoza": { nombre: "Gyoza de cerdo y cebollino a la plancha. (4 unidades)", precio: 3.99 },
   "ramen": { nombre: "Ramen de pollo, verduras y huevo", precio: 4.99 },
-  "calif-medio": { nombre: "Medio Rollo", precio: 5.99 },
-  "calif-compl": { nombre: "Rollo Completo", precio: 9.99 },
-  "dragon-medio": { nombre: "Medio Rollo", precio: 6.49 },
-  "dragon-full": { nombre: "Rollo Completo", precio: 9.99 },
-  "phil-medio": { nombre: "Medio Rollo", precio: 5.99 },
-  "phil-full": { nombre: "Rollo Completo", precio: 9.99 },
-  "rain-medio": { nombre: "Medio Rollo", precio: 5.99 },
-  "rain-full": { nombre: "Rollo Completo", precio: 9.99 },
-  "tiger-medio": { nombre: "Medio Rollo", precio: 6.99 },
-  "tiger-full": { nombre: "Rollo Completo", precio: 10.99 },
-  "Kani-medio": { nombre: "Medio Rollo", precio: 6.99 },
-  "Kani-full": { nombre: "Rollo Completo", precio: 10.99 },
-  "sunset-medio": { nombre: "Medio Rollo", precio: 7.99 },
-  "sunset-full": { nombre: "Rollo Completo", precio: 11.99 },
-  "Ura-medio": { nombre: "Medio Rollo", precio: 6.99 },
-  "ura-full": { nombre: "Rollo Completo", precio: 10.99 },
+  "calif-medio": { nombre: "California Roll — Medio Rollo", precio: 5.99 },
+  "calif-compl": { nombre: "California Roll — Rollo Completo", precio: 9.99 },
+  "dragon-medio": { nombre: "Dragon Roll — Medio Rollo", precio: 6.49 },
+  "dragon-full": { nombre: "Dragon Roll — Rollo Completo", precio: 9.99 },
+  "phil-medio": { nombre: "Philadelphia Roll — Medio Rollo", precio: 5.99 },
+  "phil-full": { nombre: "Philadelphia Roll — Rollo Completo", precio: 9.99 },
+  "rain-medio": { nombre: "Rainbow Roll — Medio Rollo", precio: 5.99 },
+  "rain-full": { nombre: "Rainbow Roll — Rollo Completo", precio: 9.99 },
+  "tiger-medio": { nombre: "Tiger Eye Roll — Medio Rollo", precio: 6.99 },
+  "tiger-full": { nombre: "Tiger Eye Roll — Rollo Completo", precio: 10.99 },
+  "Kani-medio": { nombre: "Kani Maracuyá Roll — Medio Rollo", precio: 6.99 },
+  "Kani-full": { nombre: "Kani Maracuyá Roll — Rollo Completo", precio: 10.99 },
+  "sunset-medio": { nombre: "Sunset Roll — Medio Rollo", precio: 7.99 },
+  "sunset-full": { nombre: "Sunset Roll — Rollo Completo", precio: 11.99 },
+  "Ura-medio": { nombre: "Uramaki Salmón Tostado Roll — Medio Rollo", precio: 6.99 },
+  "ura-full": { nombre: "Uramaki Salmón Tostado Roll — Rollo Completo", precio: 10.99 },
   "combo-2personas": { nombre: "Combo 2 personas (2 rollos clásicos enteros y 2 medios rollos especiales)", precio: 19.99 },
   "combo-3personas": { nombre: "Combo 3 personas (3 rollos clásicos enteros y 3 medios rollos especiales) + 3 gaseosas personales", precio: 27.99 },
   "combo-4personas": { nombre: "Combo 4 personas (5 rollos enteros)", precio: 34.99 },
@@ -71,6 +71,17 @@ function calcularEnvio(subtotal) {
   return ENVIO.amount;
 }
 
+// Limpia texto que viene del navegador (quita saltos/caracteres raros y acorta).
+function limpiar(t, max) {
+  const s = String(t == null ? '' : t);
+  let out = '';
+  for (let i = 0; i < s.length && out.length < max; i++) {
+    const c = s.charCodeAt(i);
+    out += (c < 32 || c === 127) ? ' ' : s.charAt(i);
+  }
+  return out.trim();
+}
+
 // Distancia en línea recta (fórmula de Haversine), en km.
 function distanciaKm(lat1, lng1, lat2, lng2) {
   const R = 6371;
@@ -86,8 +97,15 @@ function distanciaKm(lat1, lng1, lat2, lng2) {
 // pedidos simultáneos nunca reciben el mismo número.
 async function siguienteNumeroPedido(event) {
   const blobs = require('@netlify/blobs');
-  blobs.connectLambda(event);
-  const store = blobs.getStore({ name: 'pedidos', consistency: 'strong' });
+  const opciones = { name: 'pedidos', consistency: 'strong' };
+  if (process.env.BLOBS_SITE_ID && process.env.BLOBS_TOKEN) {
+    // Opcional: credenciales manuales (solo si el modo automático no funciona)
+    opciones.siteID = process.env.BLOBS_SITE_ID;
+    opciones.token = process.env.BLOBS_TOKEN;
+  } else {
+    blobs.connectLambda(event);
+  }
+  const store = blobs.getStore(opciones);
   for (let intento = 0; intento < 10; intento++) {
     const actual = await store.getWithMetadata('contador', { type: 'text' });
     if (!actual) {
@@ -118,9 +136,13 @@ exports.handler = async function (event) {
       const qty = Math.floor(Number(it.qty));
       if (!(qty > 0)) return;
       const producto = PRECIOS[it.sku];
-      if (!producto) { desconocidos.push(it.sku); lineas.push('⚠️ SKU desconocido: ' + it.sku + ' x' + qty); return; }
-      subtotal += producto.precio * qty;
-      lineas.push(qty + 'x ' + producto.nombre + ' — $' + producto.precio.toFixed(2) + ' c/u');
+      const detalle = limpiar(it.detalle, 300);
+      if (!producto) { desconocidos.push(it.sku); lineas.push('⚠️ SKU desconocido: ' + limpiar(it.sku, 60) + ' x' + qty); }
+      else {
+        subtotal += producto.precio * qty;
+        lineas.push(qty + 'x ' + producto.nombre + ' — $' + producto.precio.toFixed(2) + ' c/u');
+      }
+      if (detalle) lineas.push('   ↳ ' + detalle);
     });
     if (!lineas.length) return { statusCode: 400, body: 'Sin items válidos' };
 
@@ -128,9 +150,13 @@ exports.handler = async function (event) {
     const total = subtotal + envio;
 
     let numeroPedido = null;
+    let falloContador = '';
     if (SECUENCIAL) {
       try { numeroPedido = await siguienteNumeroPedido(event); }
-      catch (e) { console.error('No se pudo generar el número de pedido:', e); }
+      catch (e) {
+        console.error('No se pudo generar el número de pedido:', e);
+        falloContador = limpiar((e && (e.name + ': ' + e.message)) || e, 200);
+      }
     }
 
     let mensaje = '🔔 Nuevo pedido' + (numeroPedido ? ' #' + numeroPedido : '') + ' (verificación)\n\n' + lineas.join('\n');
@@ -139,6 +165,17 @@ exports.handler = async function (event) {
       mensaje += '\nEnvío: ' + (envio === 0 ? 'Gratis' : '$' + envio.toFixed(2));
     }
     mensaje += '\n\nTotal real: $' + total.toFixed(2);
+
+    const ex = (data.extras && typeof data.extras === 'object') ? data.extras : null;
+    if (ex) {
+      const bloque = [];
+      if (ex.direccion) bloque.push('📍 Dirección escrita: ' + limpiar(ex.direccion, 300));
+      if (Array.isArray(ex.opciones) && ex.opciones.length) {
+        bloque.push('🍽️ Preferencias: ' + ex.opciones.slice(0, 10).map(function (o) { return limpiar(o, 80); }).join(', '));
+      }
+      if (ex.notas) bloque.push('📝 Notas del cliente: ' + limpiar(ex.notas, 500));
+      if (bloque.length) mensaje += '\n\n' + bloque.join('\n');
+    }
 
     if (RESTAURANTE.enabled) {
       const g = data.geo;
@@ -155,6 +192,8 @@ exports.handler = async function (event) {
       }
     }
     if (desconocidos.length) mensaje += '\n\n⚠️ Atención: hay códigos que no existen en la tabla de precios.';
+    if (SECUENCIAL && !numeroPedido) mensaje += '\n\n⚠️ No se pudo asignar número de pedido. Motivo: ' + (falloContador || 'desconocido');
+    if (mensaje.length > 4000) mensaje = mensaje.slice(0, 3990) + '…';
 
     const token = process.env.TELEGRAM_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
