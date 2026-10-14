@@ -93,11 +93,14 @@ function distanciaKm(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-// Contador atómico: usa escrituras condicionales de Netlify Blobs, así dos
-// pedidos simultáneos nunca reciben el mismo número.
+// Número de pedido consecutivo con Netlify Blobs.
+// Cada número se "reserva" creando una llave nueva (n1, n2, n3...) que solo
+// puede crearse UNA vez (onlyIfNew), así dos pedidos simultáneos nunca
+// reciben el mismo número. La llave "ultimo" es solo una pista para empezar
+// cerca (puede estar un poco atrasada; no afecta la exactitud).
 async function siguienteNumeroPedido(event) {
   const blobs = require('@netlify/blobs');
-  const opciones = { name: 'pedidos', consistency: 'strong' };
+  const opciones = { name: 'pedidos' };
   if (process.env.BLOBS_SITE_ID && process.env.BLOBS_TOKEN) {
     // Opcional: credenciales manuales (solo si el modo automático no funciona)
     opciones.siteID = process.env.BLOBS_SITE_ID;
@@ -106,16 +109,20 @@ async function siguienteNumeroPedido(event) {
     blobs.connectLambda(event);
   }
   const store = blobs.getStore(opciones);
-  for (let intento = 0; intento < 10; intento++) {
-    const actual = await store.getWithMetadata('contador', { type: 'text' });
-    if (!actual) {
-      const r = await store.set('contador', '1', { onlyIfNew: true });
-      if (r.modified) return 1;
-      continue;
+
+  let n = 1;
+  try {
+    const pista = await store.get('ultimo');
+    n = (parseInt(pista, 10) || 0) + 1;
+  } catch (e) { /* sin pista: se empieza desde 1 */ }
+
+  for (let intento = 0; intento < 80; intento++) {
+    const r = await store.set('n' + n, new Date().toISOString(), { onlyIfNew: true });
+    if (r.modified) {
+      try { await store.set('ultimo', String(n)); } catch (e) { /* solo es una pista */ }
+      return n;
     }
-    const n = (parseInt(actual.data, 10) || 0) + 1;
-    const r = await store.set('contador', String(n), { onlyIfMatch: actual.etag });
-    if (r.modified) return n;
+    n++;
   }
   throw new Error('No se pudo reservar el número de pedido');
 }
@@ -137,12 +144,12 @@ exports.handler = async function (event) {
       if (!(qty > 0)) return;
       const producto = PRECIOS[it.sku];
       const detalle = limpiar(it.detalle, 300);
-      if (!producto) { desconocidos.push(it.sku); lineas.push('⚠️ SKU desconocido: ' + limpiar(it.sku, 60) + ' x' + qty); }
+      if (!producto) { desconocidos.push(it.sku); lineas.push('• ⚠️ SKU desconocido: ' + limpiar(it.sku, 60) + ' x' + qty); }
       else {
         subtotal += producto.precio * qty;
-        lineas.push(qty + 'x ' + producto.nombre + ' — $' + producto.precio.toFixed(2) + ' c/u');
+        lineas.push('• ' + qty + 'x ' + producto.nombre + ' — $' + producto.precio.toFixed(2) + ' c/u');
       }
-      if (detalle) lineas.push('   ↳ ' + detalle);
+      if (detalle) lineas.push('    ↳ ' + detalle);
     });
     if (!lineas.length) return { statusCode: 400, body: 'Sin items válidos' };
 
