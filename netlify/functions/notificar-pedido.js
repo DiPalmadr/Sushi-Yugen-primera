@@ -65,6 +65,10 @@ const RESTAURANTE = {
 // Blobs (requiere el archivo package.json que viene en esta carpeta).
 const SECUENCIAL = true;
 
+// Primer número de pedido. Si ya hay pedidos con un número mayor, el contador
+// sigue desde el último (nunca repite ni retrocede).
+const PEDIDO_INICIAL = 1984;
+
 function calcularEnvio(subtotal) {
   if (!ENVIO.enabled) return 0;
   if (ENVIO.freeEnabled && subtotal >= ENVIO.freeMin) return 0;
@@ -110,11 +114,11 @@ async function siguienteNumeroPedido(event) {
   }
   const store = blobs.getStore(opciones);
 
-  let n = 1;
+  let n = PEDIDO_INICIAL;
   try {
     const pista = await store.get('ultimo');
-    n = (parseInt(pista, 10) || 0) + 1;
-  } catch (e) { /* sin pista: se empieza desde 1 */ }
+    n = Math.max((parseInt(pista, 10) || 0) + 1, PEDIDO_INICIAL);
+  } catch (e) { /* sin pista: se empieza desde el número inicial */ }
 
   for (let intento = 0; intento < 80; intento++) {
     const r = await store.set('n' + n, new Date().toISOString(), { onlyIfNew: true });
@@ -177,6 +181,7 @@ exports.handler = async function (event) {
     if (ex) {
       const bloque = [];
       if (ex.direccion) bloque.push('📍 Dirección escrita: ' + limpiar(ex.direccion, 300));
+      if (ex.recibe) bloque.push('👤 Recibe: ' + limpiar(ex.recibe, 100));
       if (Array.isArray(ex.opciones) && ex.opciones.length) {
         bloque.push('🍽️ Preferencias: ' + ex.opciones.slice(0, 10).map(function (o) { return limpiar(o, 80); }).join(', '));
       }
