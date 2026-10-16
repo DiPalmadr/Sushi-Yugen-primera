@@ -25,10 +25,10 @@ const PRECIOS = {
   "tiger-full": { nombre: "Tiger Eye Roll — Rollo Completo", precio: 10.99 },
   "Kani-medio": { nombre: "Kani Maracuyá Roll — Medio Rollo", precio: 6.99 },
   "Kani-full": { nombre: "Kani Maracuyá Roll — Rollo Completo", precio: 10.99 },
-  "sunset-medio": { nombre: "Sunset Roll — Medio Rollo", precio: 7.99 },
-  "sunset-full": { nombre: "Sunset Roll — Rollo Completo", precio: 11.99 },
   "Ura-medio": { nombre: "Uramaki Salmón Tostado Roll — Medio Rollo", precio: 6.99 },
   "ura-full": { nombre: "Uramaki Salmón Tostado Roll — Rollo Completo", precio: 10.99 },
+  "sunset-medio": { nombre: "Sunset Roll — Medio Rollo", precio: 7.99 },
+  "sunset-full": { nombre: "Sunset Roll — Rollo Completo", precio: 11.99 },
   "combo-2personas": { nombre: "Combo 2 personas (2 rollos clásicos enteros y 2 medios rollos especiales)", precio: 19.99 },
   "combo-3personas": { nombre: "Combo 3 personas (3 rollos clásicos enteros y 3 medios rollos especiales) + 3 gaseosas personales", precio: 27.99 },
   "combo-4personas": { nombre: "Combo 4 personas (5 rollos enteros)", precio: 34.99 },
@@ -67,7 +67,7 @@ const SECUENCIAL = true;
 
 // Primer número de pedido. Si ya hay pedidos con un número mayor, el contador
 // sigue desde el último (nunca repite ni retrocede).
-const PEDIDO_INICIAL = 1984;
+const PEDIDO_INICIAL = 3468;
 
 function calcularEnvio(subtotal) {
   if (!ENVIO.enabled) return 0;
