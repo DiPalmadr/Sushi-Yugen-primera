@@ -67,7 +67,7 @@ const SECUENCIAL = true;
 
 // Primer número de pedido. Si ya hay pedidos con un número mayor, el contador
 // sigue desde el último (nunca repite ni retrocede).
-const PEDIDO_INICIAL = 3468;
+const PEDIDO_INICIAL = 3768;
 
 function calcularEnvio(subtotal) {
   if (!ENVIO.enabled) return 0;
